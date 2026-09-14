@@ -15,7 +15,7 @@ Runs on `http://localhost:5173`. The backend must also be running for the form t
 ### Environment Variables
 
 | Variable       | Purpose                     |
-| -------------- | ---------------------------- |
+| -------------- | --------------------------- |
 | `VITE_API_URL` | Base URL of the backend API |
 
 ## Folder Structure
@@ -59,13 +59,13 @@ Four UI states are handled explicitly: idle, loading, success, error — each wi
 
 All tracking calls go through `lib/tracking.ts` — no component calls `dataLayer.push` or `fbq` directly.
 
-| Function                              | Fires                            | Trigger point                                               |
-| -------------------------------------- | --------------------------------- | -------------------------------------------------------------- |
-| `trackPageView()`                     | `page_view`                      | `LandingPage` mount (`useEffect`)                            |
-| `trackCtaClick()`                     | `cta_click`                      | Navbar CTA `onClick`                                         |
-| `trackFormStart()`                    | `form_start`                     | First field `onFocus` in `LeadForm` (fires once)              |
-| `trackFormSubmitted()`                | `form_submitted` + Meta `Lead`   | Only inside `result.success` branch of the submit handler     |
-| `trackFormSubmissionFailure(reason)`  | `form_submission_failure`        | Validation error, 429, 502, or network error                  |
+| Function                             | Fires                          | Trigger point                                             |
+| ------------------------------------ | ------------------------------ | --------------------------------------------------------- |
+| `trackPageView()`                    | `page_view`                    | `LandingPage` mount (`useEffect`)                         |
+| `trackCtaClick()`                    | `cta_click`                    | Navbar CTA `onClick`                                      |
+| `trackFormStart()`                   | `form_start`                   | First field `onFocus` in `LeadForm` (fires once)          |
+| `trackFormSubmitted()`               | `form_submitted` + Meta `Lead` | Only inside `result.success` branch of the submit handler |
+| `trackFormSubmissionFailure(reason)` | `form_submission_failure`      | Validation error, 429, 502, or network error              |
 
 **The conversion event is structurally prevented from firing on click alone** — `trackFormSubmitted()` is the only function that calls `fbq('track', 'Lead')`, and it's only reachable after the backend confirms success.
 
@@ -92,11 +92,11 @@ Safari occasionally doesn't fire the input `change` event on autofill, meaning `
 
 Tested with Lighthouse (Chrome DevTools, Mobile) against the deployed site.
 
-| Category       | Score      |
-| --------------- | ----------- |
-| Performance     | __ / 100    |
-| Accessibility   | __ / 100    |
-| Best Practices  | __ / 100    |
-| SEO             | __ / 100    |
+| Category       | Score     |
+| -------------- | --------- |
+| Performance    | 90 / 100  |
+| Accessibility  | 91 / 100  |
+| Best Practices | 100 / 100 |
+| SEO            | 100 / 100 |
 
 ![Lighthouse scores](../screenshots/lighthouse-scores/lighthouse-scores.png)

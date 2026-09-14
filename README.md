@@ -2,8 +2,8 @@
 
 A production-style marketing website built for a technical assessment: a responsive landing page with a working lead-generation flow, a simulated CRM integration, and marketing tracking (GTM + Meta Pixel).
 
-**Live site:** _[add deployed frontend URL]_
-**Live API:** _[add deployed backend URL]_
+**Live site:** [_\[add deployed frontend URL\]_](https://lead-gen-backend-n981.onrender.com)
+**Live API:** [_\[add deployed backend URL\]_](https://lead-gen-marketing-site.vercel.app/)
 
 ## Overview
 
@@ -24,13 +24,13 @@ No database — lead persistence isn't required by the brief; the simulated CRM 
 
 ## Technology Choices
 
-| Layer      | Stack                                       | Why                                                        |
-| ---------- | -------------------------------------------- | ----------------------------------------------------------- |
-| Frontend   | Vite + React + TypeScript + Tailwind v4      | Fast tooling, type safety, no heavy design system needed    |
-| Forms      | react-hook-form + zod                        | Minimal re-renders; schema reused server-side               |
-| State      | Zustand (minimal)                            | One shared flag (`hasSubmitted`); everything else local     |
-| Backend    | Express + TypeScript                         | Enough structure for one real endpoint                      |
-| Deployment | Vercel/Netlify (frontend), Render (backend)  | Free tiers, no card required                                |
+| Layer      | Stack                                       | Why                                                      |
+| ---------- | ------------------------------------------- | -------------------------------------------------------- |
+| Frontend   | Vite + React + TypeScript + Tailwind v4     | Fast tooling, type safety, no heavy design system needed |
+| Forms      | react-hook-form + zod                       | Minimal re-renders; schema reused server-side            |
+| State      | Zustand (minimal)                           | One shared flag (`hasSubmitted`); everything else local  |
+| Backend    | Express + TypeScript                        | Enough structure for one real endpoint                   |
+| Deployment | Vercel/Netlify (frontend), Render (backend) | Free tiers, no card required                             |
 
 Full rationale for each choice is in the respective subfolder README.
 
@@ -115,3 +115,13 @@ Submit a fixed, known number of test leads through the real flow. Confirm that e
 ## Performance Results
 
 Lighthouse scores and full breakdown are documented in [`frontend/README.md`](./frontend/README.md#performance-results).
+
+### How I Would Verify the Final Fix
+
+Submit a fixed, known number of test leads through the real flow. Confirm that exact number appears in both the backend's lead log and Meta Events Manager's real-time count for the same window, with no duplicates and no gaps. Repeat once more after a short delay to rule out a timing fluke before considering it resolved.
+
+**Demonstrated via:** `window.dataLayer` inspection in the browser console, the Meta Pixel Helper extension confirming the `Lead` event fires only after a genuinely successful submission (and does not fire on an invalid one), and the Network tab confirming the actual outbound request to `facebook.com/tr`. Screenshots below.
+
+![dataLayer console](./screenshots/datalayer-console.png)
+![Meta Pixel Helper](./screenshots/meta-pixel-helper.png)
+![Network tab - Meta request](./screenshots/network-tab-facebook.png)
