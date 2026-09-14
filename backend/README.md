@@ -4,68 +4,70 @@ Express + TypeScript API handling lead submission, validation, and a simulated C
 
 ## Setup
 
-\`\`\`bash
+```bash
 npm install
 cp .env.example .env
 npm run dev
-\`\`\`
+```
 
 Runs on `http://localhost:4000`. Confirm with:
-\`\`\`bash
+
+```bash
 curl http://localhost:4000/health
-\`\`\`
+```
 
 ### Environment Variables
 
-| Variable               | Purpose                                                                 |
-| ---------------------- | ----------------------------------------------------------------------- |
-| `PORT`                 | Server port (default 4000)                                              |
-| `ALLOWED_ORIGIN`       | CORS — must match the frontend's URL exactly                            |
-| `CRM_API_KEY`          | Placeholder key read by the simulated CRM service                       |
-| `SIMULATE_CRM_FAILURE` | Set to `true` to force the CRM call to fail, for testing the error path |
+| Variable               | Purpose                                                                  |
+| ------------------------ | -------------------------------------------------------------------------- |
+| `PORT`                  | Server port (default 4000)                                               |
+| `ALLOWED_ORIGIN`        | CORS — must match the frontend's URL exactly                             |
+| `CRM_API_KEY`           | Placeholder key read by the simulated CRM service                        |
+| `SIMULATE_CRM_FAILURE`  | Set to `true` to force the CRM call to fail, for testing the error path  |
 
 ## Folder Structure
 
-\`\`\`
+```
 src/
 ├── routes/
-│ └── lead.route.ts # POST /api/lead
+│   └── lead.route.ts       # POST /api/lead
 ├── controllers/
-│ └── lead.controller.ts # validates, calls CRM service, shapes response
+│   └── lead.controller.ts  # validates, calls CRM service, shapes response
 ├── services/
-│ └── crm.service.ts # simulated CRM call
+│   └── crm.service.ts      # simulated CRM call
 ├── validation/
-│ └── lead.schema.ts # zod schema — single source of truth
+│   └── lead.schema.ts      # zod schema — single source of truth
 ├── middleware/
-│ ├── rateLimiter.ts # duplicate-submission guard (in-memory)
-│ └── errorHandler.ts # catch-all error handler, last in the chain
-├── app.ts # express app + middleware wiring
-└── server.ts # entry point
-\`\`\`
+│   ├── rateLimiter.ts      # duplicate-submission guard (in-memory)
+│   └── errorHandler.ts     # catch-all error handler, last in the chain
+├── app.ts                  # express app + middleware wiring
+└── server.ts                # entry point
+```
 
 ## API Documentation
 
 ### `POST /api/lead`
 
 **Request body**
-\`\`\`json
+
+```json
 {
-"name": "Jane Doe",
-"email": "jane@example.com",
-"company": "Acme Inc",
-"phone": "+1 555-123-4567",
-"message": "Interested in your digital marketing service."
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "company": "Acme Inc",
+  "phone": "+1 555-123-4567",
+  "message": "Interested in your digital marketing service."
 }
-\`\`\`
+```
 
 **Responses**
 
-| Status | Meaning                                 | Body                                                                           |
-| ------ | --------------------------------------- | ------------------------------------------------------------------------------ |
-| 200    | Success                                 | `{ "success": true, "leadId": "sim_..." }`                                     |
-| 400    | Validation failed                       | `{ "success": false, "errors": { "email": ["Enter a valid email address"] } }` |
-| 429    | Duplicate submission (same email, <10s) | `{ "success": false, "error": "..." }`                                         |
-| 502    | Simulated CRM failure                   | `{ "success": false, "error": "..." }`                                         |
+| Status | Meaning                                 | Body                                                                            |
+| ------ | ----------------------------------------- | ---------------------------------------------------------------------------------- |
+| 200    | Success                                  | `{ "success": true, "leadId": "sim_..." }`                                        |
+| 400    | Validation failed                        | `{ "success": false, "errors": { "email": ["Enter a valid email address"] } }`    |
+| 429    | Duplicate submission (same email, <10s)  | `{ "success": false, "error": "..." }`                                            |
+| 502    | Simulated CRM failure                    | `{ "success": false, "error": "..." }`                                            |
 
 ### `GET /health`
 
@@ -93,17 +95,14 @@ Returns `{ "status": "ok" }`.
 
 ## Local Testing Reference
 
-\`\`\`bash
-
+```bash
 # valid submission
-
 curl -X POST http://localhost:4000/api/lead \
- -H "Content-Type: application/json" \
- -d '{"name":"Jane Doe","email":"jane@example.com","company":"Acme Inc","phone":"+15551234567","message":"Interested in your service."}'
+  -H "Content-Type: application/json" \
+  -d '{"name":"Jane Doe","email":"jane@example.com","company":"Acme Inc","phone":"+15551234567","message":"Interested in your service."}'
 
 # invalid submission
-
 curl -X POST http://localhost:4000/api/lead \
- -H "Content-Type: application/json" \
- -d '{"name":"J","email":"not-an-email","company":"","phone":"abc","message":"hi"}'
-\`\`\`
+  -H "Content-Type: application/json" \
+  -d '{"name":"J","email":"not-an-email","company":"","phone":"abc","message":"hi"}'
+```

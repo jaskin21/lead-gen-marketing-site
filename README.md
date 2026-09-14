@@ -24,13 +24,13 @@ No database — lead persistence isn't required by the brief; the simulated CRM 
 
 ## Technology Choices
 
-| Layer      | Stack                                       | Why                                                      |
-| ---------- | ------------------------------------------- | -------------------------------------------------------- |
-| Frontend   | Vite + React + TypeScript + Tailwind v4     | Fast tooling, type safety, no heavy design system needed |
-| Forms      | react-hook-form + zod                       | Minimal re-renders; schema reused server-side            |
-| State      | Zustand (minimal)                           | One shared flag (`hasSubmitted`); everything else local  |
-| Backend    | Express + TypeScript                        | Enough structure for one real endpoint                   |
-| Deployment | Vercel/Netlify (frontend), Render (backend) | Free tiers, no card required                             |
+| Layer      | Stack                                       | Why                                                        |
+| ---------- | -------------------------------------------- | ----------------------------------------------------------- |
+| Frontend   | Vite + React + TypeScript + Tailwind v4      | Fast tooling, type safety, no heavy design system needed    |
+| Forms      | react-hook-form + zod                        | Minimal re-renders; schema reused server-side               |
+| State      | Zustand (minimal)                            | One shared flag (`hasSubmitted`); everything else local     |
+| Backend    | Express + TypeScript                         | Enough structure for one real endpoint                      |
+| Deployment | Vercel/Netlify (frontend), Render (backend)  | Free tiers, no card required                                |
 
 Full rationale for each choice is in the respective subfolder README.
 
@@ -111,3 +111,7 @@ Submit a fixed, known number of test leads through the real flow. Confirm that e
 - A real GTM container with Preview-mode-verified tags.
 - Automated tests (Vitest/Jest) for validation and CRM service branches.
 - A consent-management step before firing tracking scripts.
+
+## Performance Results
+
+Lighthouse scores and full breakdown are documented in [`frontend/README.md`](./frontend/README.md#performance-results).
